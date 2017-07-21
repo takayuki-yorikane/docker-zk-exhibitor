@@ -1,11 +1,11 @@
-FROM debian:7.8
+FROM debian:9.0
 MAINTAINER Mike Babineau michael.babineau@gmail.com
 
 ENV \
-    ZK_RELEASE="http://www.apache.org/dist/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz" \
-    EXHIBITOR_POM="https://raw.githubusercontent.com/Netflix/exhibitor/d911a16d704bbe790d84bbacc655ef050c1f5806/exhibitor-standalone/src/main/resources/buildscripts/standalone/maven/pom.xml" \
+    ZK_RELEASE="http://www.apache.org/dist/zookeeper/zookeeper-3.4.10/zookeeper-3.4.10.tar.gz" \
+    EXHIBITOR_POM="https://raw.githubusercontent.com/soabase/exhibitor/master/exhibitor-standalone/src/main/resources/buildscripts/standalone/maven/pom.xml" \
     # Append "+" to ensure the package doesn't get purged
-    BUILD_DEPS="curl maven openjdk-7-jdk+" \
+    BUILD_DEPS="curl maven openjdk-8-jdk+" \
     DEBIAN_FRONTEND="noninteractive"
 
 # Use one step so we can remove intermediate dependencies and minimize size
@@ -15,7 +15,7 @@ RUN \
     && apt-get install -y --allow-unauthenticated --no-install-recommends $BUILD_DEPS \
 
     # Default DNS cache TTL is -1. DNS records, like, change, man.
-    && grep '^networkaddress.cache.ttl=' /etc/java-7-openjdk/security/java.security || echo 'networkaddress.cache.ttl=60' >> /etc/java-7-openjdk/security/java.security \
+    && grep '^networkaddress.cache.ttl=' /etc/java-8-openjdk/security/java.security || echo 'networkaddress.cache.ttl=60' >> /etc/java-8-openjdk/security/java.security \
 
     # Install ZK
     && curl -Lo /tmp/zookeeper.tgz $ZK_RELEASE \
@@ -30,7 +30,7 @@ RUN \
     && ln -s /opt/exhibitor/target/exhibitor*jar /opt/exhibitor/exhibitor.jar \
 
     # Remove build-time dependencies
-    && apt-get purge -y --auto-remove $BUILD_DEPS \
+#    && apt-get purge -y --auto-remove $BUILD_DEPS \
     && rm -rf /var/lib/apt/lists/*
 
 # Add the wrapper script to setup configs and exec exhibitor

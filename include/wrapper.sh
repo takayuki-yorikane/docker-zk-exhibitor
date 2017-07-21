@@ -3,7 +3,8 @@
 # Generates the default exhibitor config and launches exhibitor
 
 MISSING_VAR_MESSAGE="must be set"
-DEFAULT_AWS_REGION="us-west-2"
+HOSTNAME=`curl -q http://169.254.169.254/latest/meta-data/public-ipv4`
+DEFAULT_AWS_REGION="us-east-1"
 DEFAULT_DATA_DIR="/opt/zookeeper/snapshots"
 DEFAULT_LOG_DIR="/opt/zookeeper/transactions"
 DEFAULT_ZK_ENSEMBLE_SIZE=0
@@ -35,7 +36,7 @@ cat <<- EOF > /opt/exhibitor/defaults.conf
 	election-port=3888
 	zoo-cfg-extra=tickTime\=2000&initLimit\=10&syncLimit\=5&quorumListenOnAllIPs\=true
 	auto-manage-instances-settling-period-ms=0
-	auto-manage-instances=1
+	auto-manage-instances=0
 	auto-manage-instances-fixed-ensemble-size=$ZK_ENSEMBLE_SIZE
 EOF
 
@@ -87,6 +88,7 @@ exec 2>&1
 # 	--s3credentials /opt/exhibitor/credentials.properties \
 # 	--s3region us-west-2 --s3backup true
 
+# see: https://github.com/soabase/exhibitor/wiki/Running-Exhibitor
 java -jar /opt/exhibitor/exhibitor.jar \
   --port 8181 --defaultconfig /opt/exhibitor/defaults.conf \
   ${BACKUP_CONFIG} \
