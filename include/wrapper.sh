@@ -8,6 +8,7 @@ DEFAULT_AWS_REGION="us-east-1"
 DEFAULT_DATA_DIR="/opt/zookeeper/snapshots"
 DEFAULT_LOG_DIR="/opt/zookeeper/transactions"
 DEFAULT_ZK_ENSEMBLE_SIZE=0
+DEFAULT_TIMEOUT=60000
 S3_SECURITY=""
 HTTP_PROXY=""
 : ${HOSTNAME:?$MISSING_VAR_MESSAGE}
@@ -15,6 +16,7 @@ HTTP_PROXY=""
 : ${ZK_DATA_DIR:=$DEFAULT_DATA_DIR}
 : ${ZK_LOG_DIR:=$DEFAULT_LOG_DIR}
 : ${ZK_ENSEMBLE_SIZE:=$DEFAULT_ZK_ENSEMBLE_SIZE}
+: ${TIMEOUT:=$DEFAULT_TIMEOUT}
 : ${HTTP_PROXY_HOST:=""}
 : ${HTTP_PROXY_PORT:=""}
 : ${HTTP_PROXY_USERNAME:=""}
@@ -94,4 +96,5 @@ java -jar /opt/exhibitor/exhibitor.jar \
   ${BACKUP_CONFIG} \
   ${HTTP_PROXY} \
   --hostname ${HOSTNAME} \
+  --timeout ${TIMEOUT} \
   ${SECURITY}
