@@ -37,7 +37,7 @@ cat <<- EOF > /opt/exhibitor/defaults.conf
 	observer-threshold=0
 	election-port=3888
 	zoo-cfg-extra=tickTime\=2000&initLimit\=10&syncLimit\=5&quorumListenOnAllIPs\=true
-	auto-manage-instances-settling-period-ms=0
+	auto-manage-instances-settling-period-ms=10000
 	auto-manage-instances=1
 	auto-manage-instances-fixed-ensemble-size=$ZK_ENSEMBLE_SIZE
 EOF
